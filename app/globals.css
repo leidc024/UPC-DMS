@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #7a1818;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #333333;
+  --background: #ffffff;
+  --foreground: #333333;
+  --muted: #f1f1f1;
+  --muted-foreground: #666666;
+  --border: #e5e5e5;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.btn-primary {
+  background-color: #7a1818;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #5a1212;
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.stat-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #7a1818;
+}
+
+.stat-label {
+  color: #666666;
+  font-size: 0.875rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #7a1818;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  color: #666666;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
