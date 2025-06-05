@@ -45,3 +45,14 @@ export type Occupant = {
   resident_name?: string // For joined queries
   building_name?: string // For joined queries
 }
+
+export type Applicant = {
+  student_number: string
+  fname: string
+  lname: string
+  within_cebu: boolean
+  parents_BIR: number
+  year_level: number
+  chance_of_passing: number
+  emergency_contact: string
+}

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { LayoutDashboard, Info, Building2, Users, DoorOpen } from "lucide-react"
+import { LayoutDashboard, Info, Building2, Users, DoorOpen, FileUser } from "lucide-react"
 
 export default function Header() {
   return (
@@ -44,6 +44,10 @@ export default function Header() {
           <Link href="/rooms" className="flex items-center gap-2 hover:text-gray-200">
             <DoorOpen className="h-5 w-5" />
             <span>Rooms</span>
+          </Link>
+          <Link href="/applicants" className="flex items-center gap-2 hover:text-gray-200">
+            <FileUser className="h-5 w-5" />
+            <span>Applicants</span>
           </Link>
         </nav>
 
