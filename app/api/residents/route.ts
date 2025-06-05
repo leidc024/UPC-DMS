@@ -1,6 +1,7 @@
 import { sql, type Resident } from "@/lib/db";
 import { type NextRequest, NextResponse } from "next/server";
 
+// GET: List/search/filter residents (your original code)
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const search = searchParams.get("search") || "";
@@ -29,4 +30,40 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json(residents);
+}
+
+// POST: Add a new resident (for "Convert Applicant to Resident")
+export async function POST(request: NextRequest) {
+  const data = await request.json();
+  const {
+    student_number,
+    fname,
+    lname,
+    email,
+    course,
+    emergency_contact,
+    // add other fields if you have them
+  } = data;
+
+  // Insert into the residents table
+  await sql`
+    INSERT INTO residents (
+      student_number,
+      fname,
+      lname,
+      email,
+      course,
+      emergency_contact
+    )
+    VALUES (
+      ${student_number},
+      ${fname},
+      ${lname},
+      ${email},
+      ${course},
+      ${emergency_contact}
+    )
+  `;
+
+  return NextResponse.json({ message: "Resident added successfully." }, { status: 201 });
 }

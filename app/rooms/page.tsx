@@ -101,21 +101,16 @@ export default async function RoomsPage() {
                     <td className="px-4 py-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs ${
-                          room.current_occupants >= room.capacity
-                            ? "bg-red-100 text-red-800"
-                            : room.current_occupants === 0
-                              ? "bg-green-100 text-green-800"
-                              : "bg-yellow-100 text-yellow-800"
+                          room.current_occupants > 0
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
                         }`}
                       >
-                        {room.current_occupants >= room.capacity
-                          ? "Full"
-                          : room.current_occupants === 0
-                            ? "Available"
-                            : "Partially Occupied"}
+                        {room.current_occupants > 0 ? "Occupied" : "Unoccupied"}
                         ({room.current_occupants}/{room.capacity})
                       </span>
                     </td>
+
                     <td className="px-4 py-3 text-right">
                       <Link
                         href={`/rooms/${room.building_id}/${room.room_number}`}

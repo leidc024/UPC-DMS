@@ -54,11 +54,55 @@ export async function updateApplicant(id: string, applicant: Partial<Applicant>)
 }
 
 export async function deleteApplicant(id: string) {
-  // First, delete all occupants associated with this applicants
   await sql`
     DELETE FROM applicants WHERE student_number = ${id}
   `
-
   revalidatePath("/applicants")
+  revalidatePath("/")
+}
+
+// ----------------- NEW FUNCTION: Convert Applicant to Resident -----------------
+export async function convertApplicantToResident(
+  applicantId: string,
+  email: string,
+  course: string
+) {
+  // 1. Get applicant info
+  const applicants = await sql<Applicant[]>`
+    SELECT * FROM applicants WHERE student_number = ${applicantId}
+  `
+  const applicant = applicants[0]
+  if (!applicant) throw new Error("Applicant not found")
+
+  // 2. Insert into residents table, inheriting values + the new ones
+  await sql`
+    INSERT INTO residents (
+      student_number,
+      fname,
+      lname,
+      year_level,
+      emergency_contact,
+      email,
+      course
+    )
+    VALUES (
+      ${applicant.student_number},
+      ${applicant.fname},
+      ${applicant.lname},
+      ${applicant.year_level},
+      ${applicant.emergency_contact},
+      ${email},
+      ${course}
+    )
+  `
+
+  // 3. Delete from applicants
+  await sql`
+    DELETE FROM applicants WHERE student_number = ${applicantId}
+  `
+
+  // 4. Revalidate relevant pages
+  revalidatePath("/applicants")
+  revalidatePath("/residents")
   revalidatePath("/")
 }
