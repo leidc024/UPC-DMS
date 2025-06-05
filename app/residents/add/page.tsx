@@ -16,7 +16,7 @@ export default function AddResidentPage() {
     lname: "",
     course: "",
     year_level: "",
-    email: "",
+    email: "",  
     emergency_contact: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
