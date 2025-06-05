@@ -25,9 +25,9 @@ export async function addApplicants(applicant: Omit<Applicant, "student_number">
             ${applicant.fname}, 
             ${applicant.lname}, 
             ${applicant.within_cebu}, 
-            ${applicant.psalary === "" ? null : Number(applicant.psalary)},
-            ${applicant.year_level === "" ? null : Number(applicant.year_level)}, 
-            ${applicant.chance_of_passing === "" ? null : Number(applicant.chance_of_passing)}, 
+            ${applicant.psalary},
+            ${applicant.year_level}, 
+            ${applicant.chance_of_passing}, 
             ${applicant.emergency_contact}
         )
     `

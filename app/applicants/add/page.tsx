@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { useEffect } from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -23,10 +23,38 @@ export default function AddApplicantsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  useEffect(() => {
+    let chance = 0
+
+    if (!formData.within_cebu) chance += 30
+
+    const bir = parseFloat(formData.psalary)
+    if (!isNaN(bir)) {
+      if (bir <= 200000) chance += 30
+      else if (bir <= 300000) chance += 25
+      else if (bir <= 400000) chance += 20
+      else if (bir <= 500000) chance += 10
+    }
+
+    const year = parseInt(formData.year_level)
+    if (year === 1) chance += 20
+    else if (year === 2) chance += 10
+
+    setFormData((prev) => ({
+      ...prev,
+      chance_of_passing: `${chance}`
+    }))
+  }, [formData.within_cebu, formData.psalary, formData.year_level])
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const { name, value } = e.target
+  setFormData((prev) => ({
+    ...prev,
+    [name]: name === "within_cebu" ? value === "true" : value
+  }))
+}
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

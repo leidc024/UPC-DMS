@@ -73,24 +73,7 @@ export default async function ApplicantsPage() {
                     <td className="px-4 py-3">{applicant.within_cebu ? "Yes" : "No"}</td>
                     <td className="px-4 py-3">₱{applicant.psalary.toLocaleString()}</td>
                     <td className="px-4 py-3">{applicant.year_level}</td>
-                    <td className="px-4 py-3">
-                        {(() => {
-                        let chance = 0
-                        if (!applicant.within_cebu) chance += 30
-
-                        const bir = applicant.psalary
-                        if (bir <= 200000) chance += 30
-                        else if (bir <= 300000) chance += 25
-                        else if (bir <= 400000) chance += 20
-                        else if (bir <= 500000) chance += 10
-
-                        const year = applicant.year_level
-                        if (year === 1) chance += 20
-                        else if (year === 2) chance += 10
-
-                        return chance
-                        })()}%
-                    </td>
+                    <td className="px-4 py-3">{applicant.chance_of_passing}%</td>
                     <td className="px-4 py-3">{applicant.emergency_contact}</td>
                     <td className="px-4 py-3 text-right">
                         <Link
