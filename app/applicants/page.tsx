@@ -1,10 +1,11 @@
 import { sql, type Applicant } from "@/lib/db"
 import Link from "next/link"
 import { UserPlus, Plus, Search } from "lucide-react"
+import ConvertButton from '@/components/ui/convertbutton'
 
 async function getApplicants() {
   const applicants = await sql<Applicant[]>`
-    SELECT * FROM applicants ORDER BY lname, fname
+    SELECT * FROM applicants ORDER BY chance_of_passing DESC
   `
   return applicants
 }
@@ -65,12 +66,7 @@ export default async function ApplicantsPage() {
                     <td className="px-4 py-3">{applicant.chance_of_passing}%</td>
                     <td className="px-4 py-3">{applicant.emergency_contact}</td>
                     <td className="px-4 py-3 text-right">
-                        <Link
-                        href={`/applicants/${applicant.student_number}`}
-                        className="text-[#7a1818] hover:underline mr-3"
-                        >
-                        Pass
-                        </Link>
+                        <ConvertButton studentNumber={applicant.student_number}/>
                         <Link
                         href={`/applicants/edit/${applicant.student_number}`}
                         className="text-[#7a1818] hover:underline"

@@ -64,10 +64,8 @@ export async function deleteApplicant(id: string) {
 // ----------------- NEW FUNCTION: Convert Applicant to Resident -----------------
 export async function convertApplicantToResident(
   applicantId: string,
-  email: string,
-  course: string
 ) {
-  // 1. Get applicant info
+
   const applicants = await sql<Applicant[]>`
     SELECT * FROM applicants WHERE student_number = ${applicantId}
   `
@@ -80,19 +78,19 @@ export async function convertApplicantToResident(
       student_number,
       fname,
       lname,
+      course,
       year_level,
-      emergency_contact,
       email,
-      course
+      emergency_contact
     )
     VALUES (
       ${applicant.student_number},
       ${applicant.fname},
       ${applicant.lname},
+      null,
       ${applicant.year_level},
-      ${applicant.emergency_contact},
-      ${email},
-      ${course}
+      null,
+      ${applicant.emergency_contact}
     )
   `
 
