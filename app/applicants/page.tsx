@@ -1,6 +1,6 @@
 import { sql, type Applicant } from "@/lib/db"
 import Link from "next/link"
-import { FileUser, Plus, Search } from "lucide-react"
+import { UserPlus, Plus, Search } from "lucide-react"
 
 async function getApplicants() {
   const applicants = await sql<Applicant[]>`
@@ -17,7 +17,7 @@ export default async function ApplicantsPage() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <FileUser className="h-6 w-6 text-[#7a1818]" />
+            <UserPlus className="h-6 w-6 text-[#7a1818]" />
             Applicants
           </h1>
           <p className="text-gray-600">Manage dormitory applicants</p>
@@ -56,7 +56,7 @@ export default async function ApplicantsPage() {
                   <th className="px-4 py-2 text-left">Student Number</th>
                   <th className="px-4 py-2 text-left">Name</th>
                   <th className="px-4 py-2 text-left">Within Cebu</th>
-                  <th className="px-4 py-2 text-left">Parents BIR</th>
+                  <th className="px-4 py-2 text-left">Parents Salary</th>
                   <th className="px-4 py-2 text-left">Year Level</th>
                   <th className="px-4 py-2 text-left">Chances of Passing</th>
                   <th className="px-4 py-2 text-left">Emergency Contact</th>
@@ -64,43 +64,43 @@ export default async function ApplicantsPage() {
                 </tr>
               </thead>
               <tbody>
-                {applicants.map((applicants) => (
-                    <tr key={applicants.student_number} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-3">{applicants.student_number}</td>
+                {applicants.map((applicant) => (
+                    <tr key={applicant.student_number} className="border-b hover:bg-gray-50">
+                    <td className="px-4 py-3">{applicant.student_number}</td>
                     <td className="px-4 py-3">
-                        {applicants.lname}, {applicants.fname}
+                        {applicant.lname}, {applicant.fname}
                     </td>
-                    <td className="px-4 py-3">{applicants.within_cebu ? "Yes" : "No"}</td>
-                    <td className="px-4 py-3">₱{applicants.parents_BIR.toLocaleString()}</td>
-                    <td className="px-4 py-3">{applicants.year_level}</td>
+                    <td className="px-4 py-3">{applicant.within_cebu ? "Yes" : "No"}</td>
+                    <td className="px-4 py-3">₱{applicant.psalary.toLocaleString()}</td>
+                    <td className="px-4 py-3">{applicant.year_level}</td>
                     <td className="px-4 py-3">
                         {(() => {
                         let chance = 0
-                        if (!applicants.within_cebu) chance += 30
+                        if (!applicant.within_cebu) chance += 30
 
-                        const bir = applicants.parents_BIR
+                        const bir = applicant.psalary
                         if (bir <= 200000) chance += 30
                         else if (bir <= 300000) chance += 25
                         else if (bir <= 400000) chance += 20
                         else if (bir <= 500000) chance += 10
 
-                        const year = applicants.year_level
+                        const year = applicant.year_level
                         if (year === 1) chance += 20
                         else if (year === 2) chance += 10
 
                         return chance
-                        })()}
+                        })()}%
                     </td>
-                    <td className="px-4 py-3">{applicants.emergency_contact}</td>
+                    <td className="px-4 py-3">{applicant.emergency_contact}</td>
                     <td className="px-4 py-3 text-right">
                         <Link
-                        href={`/applicants/${applicants.student_number}`}
+                        href={`/applicants/${applicant.student_number}`}
                         className="text-[#7a1818] hover:underline mr-3"
                         >
                         Pass
                         </Link>
                         <Link
-                        href={`/applicants/edit/${applicants.student_number}`}
+                        href={`/applicants/edit/${applicant.student_number}`}
                         className="text-[#7a1818] hover:underline"
                         >
                         Edit

@@ -51,7 +51,7 @@ export type Applicant = {
   fname: string
   lname: string
   within_cebu: boolean
-  parents_BIR: number
+  psalary: number
   year_level: number
   chance_of_passing: number
   emergency_contact: string
