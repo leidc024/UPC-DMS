@@ -1,56 +1,24 @@
-// /api/room/route.ts
+import { sql, type Room } from "@/lib/db"
+import { type NextRequest, NextResponse } from "next/server"
 
-import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@/lib/db"; // adjust import to your setup
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
+  const buildingId = searchParams.get("buildingId")
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const filterBy = searchParams.get("filterBy") || "building";
-  const search = (searchParams.get("search") || "").toLowerCase();
-
-  let where = "";
-  let values: any[] = [];
-
-  if (search) {
-    if (filterBy === "building") {
-      where = "LOWER(b.name) LIKE ?";
-      values.push(`%${search}%`);
-    } else if (filterBy === "room") {
-      where = "LOWER(r.room_number) LIKE ?";
-      values.push(`%${search}%`);
-    }
+  if (!buildingId) {
+    return NextResponse.json({ error: "Building ID is required" }, { status: 400 })
   }
 
-  const rooms = await sql<
-    {
-      room_id: number;
-      room_number: string;
-      building_name: string;
-      capacity: number;
-      current_occupants: number;
-    }[]
-  >(
+  try {
+    const rooms = await sql<Room[]>`
+      SELECT * FROM rooms 
+      WHERE building_id = ${Number.parseInt(buildingId)}
+      ORDER BY room_number
     `
-    SELECT 
-      r.room_id,
-      r.room_number,
-      b.name AS building_name,
-      r.capacity,
-      COALESCE(
-        (SELECT COUNT(*) 
-         FROM occupants o 
-         WHERE o.building_id = r.building_id 
-           AND o.room_number = r.room_number 
-           AND o.check_out IS NULL), 
-        0
-      ) AS current_occupants
-    FROM rooms r
-    JOIN buildings b ON r.building_id = b.building_id
-    ${where ? `WHERE ${where}` : ""}
-    ORDER BY b.name, r.room_number
-    `,
-    values
-  );
 
-  return NextResponse.json(rooms);
+    return NextResponse.json(rooms)
+  } catch (error) {
+    console.error("Error fetching rooms:", error)
+    return NextResponse.json({ error: "Failed to fetch rooms" }, { status: 500 })
+  }
 }
