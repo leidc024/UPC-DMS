@@ -30,6 +30,31 @@ export default function EditApplicantPage({ params }: { params: { id: string } }
     loadApplicant()
   }, [studentNumber])
 
+ useEffect(() => {
+  if (!applicant) return
+
+  let chance = 0
+
+  if (applicant.within_cebu === "No") chance += 30
+
+  const psalary = applicant.psalary
+  if (typeof psalary === "number") {
+    if (psalary <= 200000) chance += 30
+    else if (psalary <= 300000) chance += 25
+    else if (psalary <= 400000) chance += 20
+    else if (psalary <= 500000) chance += 10
+  }
+
+  const year = applicant.year_level
+  if (year === 1) chance += 20
+  else if (year === 2) chance += 10
+
+  setApplicant((prev) =>
+    prev ? { ...prev, chance_of_passing: chance } : null
+  )
+}, [applicant?.within_cebu, applicant?.psalary, applicant?.year_level])
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setApplicant((prev) =>
@@ -167,7 +192,7 @@ export default function EditApplicantPage({ params }: { params: { id: string } }
               <select
                 id="within_cebu"
                 name="within_cebu"
-                value={applicant.within_cebu || ""}
+                value={applicant.within_cebu}
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7a1818]"
